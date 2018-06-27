@@ -1,52 +1,32 @@
 //ApartmentForm.js
-import React, { Component } from 'react';
-import style from './style';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-class ApartmentForm extends Component {
-	constructor(props) {
-		super(props);
-		this.state = { 
-			aptNum: '',
-			sqFt: 0,
-			rent: 0
-		};
-		this.handleAptNumChange = this.handleAptNumChange.bind(this);
-		this.handleSqFtChange = this.handleSqFtChange.bind(this);
-		this.handleRentChange = this.handleRentChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
+const ApartmentForm = props => (
+	<tr>
+		<td>
+			<form id='aptForm' onSubmit={ props.submitApartment }>
+			<input type='number' name='aptNum' value={props.aptNum} onChange= { props.handleChangeAptField } />
+			</form>
+		</td>
+		<td><input form='aptForm' type='number' name='sqFt' value={props.sqFt} onChange= { props.handleChangeAptField } /></td>
+		<td><input form='aptForm' type='number' name='rent' value={props.rent} step='0.01' onChange= { props.handleChangeAptField } /></td>
+		<td><button form='aptForm' type="submit">Add</button></td>
+	</tr>
+);
 
-	handleAptNumChange(e) {
-		this.setState({ aptNum: e.target.value });
-	}
+ApartmentForm.propTypes = {
+	submitApartment: PropTypes.func.isRequired,
+	handleChangeAptField: PropTypes.func.isRequired,
+	aptNum: PropTypes.string,
+	sqFt: PropTypes.string,
+	rent: PropTypes.string,
+};
 
-	handleSqFtChange(e) {
-		this.setState({ sqFt: e.target.value });
-	}
-
-	handleRentChange(e) {
-		this.setState({ rent: e.target.value });
-	}
-
-	handleSubmit(e) {
-		e.preventDefault();
-		console.log(`$(this.state.aptNum), $(this.state.sqFt), $(this.state.rent)`);
-	}
-
-	render() {
-		return (
-			<tr>
-				<td>
-					<form id='aptForm' onSubmit={ this.handleSubmit }>
-					<input type='number' style={ style.apartmentFormAptNum } value='0' onChange= { this.handleAptNumChange } />
-					</form>
-				</td>
-				<td><input form='aptForm' type='number' style={ style.apartmentFormSqFt } value='0' onChange= { this.handleSqFtChange } /></td>
-				<td><input form='aptForm' type='number' style={ style.apartmentFormRent } value='0' step='0.01' onChange= { this.handleRentChange } /></td>
-				<td><input form='aptForm' type='submit' style={ style.apartmentFormPost } value='Add' /></td>
-			</tr>
-		)
-	}
-}
+ApartmentForm.defaultProps = {
+	aptNum: '',
+	sqFt: '',
+	rent: '',
+};
 
 export default ApartmentForm;

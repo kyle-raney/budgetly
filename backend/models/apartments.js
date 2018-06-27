@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const ApartmentsSchema = new Schema({
 	aptNum: Number,
 	sqFt: Number,
-	rent: Schema.Types.Decimal128
+	rent: Number
 }, { timestamps: true });
 
 export default mongoose.model('Apartment', ApartmentsSchema);

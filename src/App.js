@@ -2,13 +2,12 @@
 import React, { Component } from 'react';
 import 'whatwg-fetch';
 import ApartmentList from './ApartmentList';
-import DATA from './data';
-import style from './style';
+import ApartmentForm from './ApartmentForm';
 
 class App extends Component {
 	constructor() {
 		super();
-		this.state = { data: [], error: null };
+		this.state = { data: [], error: null, aptNum: '', sqFt: '', rent: '' };
 		this.pollInterval = null;
 	}
 
@@ -33,10 +32,42 @@ class App extends Component {
 			})
 	}
 
+	onChangeAptField = (e) => {
+		const newState = { ...this.state };
+		newState[e.target.name] = e.target.value;
+		this.setState(newState);
+	}
+
+	submitApartment = (e) => {
+		e.preventDefault();
+		const { aptNum, sqFt, rent } = this.state;
+		alert('Submitting');
+		if (!aptNum) return;
+		fetch('/api/apartments', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ aptNum, sqFt, rent }),
+		}).then(res => res.json()).then((res) => {
+			if (!res.success) this.setState({ error: res.error.message || res.error });
+			else this.setState({ aptNum: '', sqFt: '', rent: '', error: null});
+		});
+	}
+
 	render() {
 		return (
-			<div style={ style.page }>
-				<ApartmentList data={ DATA }/>
+			<div className="page">
+				<ApartmentList data={ this.state.data }/>
+				<table>
+					<tbody>
+						<ApartmentForm 
+							aptNum={this.state.aptNum}
+							sqFt={this.state.sqFt}
+							rent={this.state.rent}
+							handleChangeAptField={this.onChangeAptField}
+							submitApartment={this.submitApartment}
+						/>
+					</tbody>
+				</table>
 				{this.state.error && <p>{this.state.error}</p>}
 			</div>
 		)

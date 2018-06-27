@@ -1,17 +1,19 @@
 //ApartmentRow.js
-import React, { Component } from 'react';
-import style from './style';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-class ApartmentRow extends Component {
-	render() {
-		return (
-			<tr style={ style.apartmentRow }>
-				<td style={ style.apartmentRowAptNum }>{this.props.aptNum}</td>
-				<td style={ style.apartmentRowSqFt }>{this.props.sqFt}</td>
-				<td style={ style.apartmentRowRent }>{this.props.rent}</td>
-			</tr>
-		)
-	}
-}
+const ApartmentRow = props => (
+	<tr>
+		<td>{props.aptNum}</td>
+		<td>{props.sqFt}</td>
+		<td>{props.rent}</td>
+	</tr>
+);
+
+ApartmentRow.propTypes = {
+	aptNum: PropTypes.number.isRequired,
+	sqFt: PropTypes.number,
+	rent: PropTypes.number,
+};
 
 export default ApartmentRow;

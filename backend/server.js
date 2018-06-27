@@ -63,6 +63,35 @@ router.post('/apartments', (req, res) => {
 	});
 });
 
+router.put('/apartments/:apartmentId', (req, res) => {
+	const { apartmentId } = req.params;
+	if (!apartmentId) {
+		return res.json({ success: false, error: 'No apartment id provided' });
+	}
+	Apartment.findById(apartmentId, (error, comment) => {
+		if (error) return res.json({ success: false, error });
+		const { aptNum, sqFt, rent } = req.body;
+		if (aptNum) apartment.aptNum = aptNum;
+		if (sqFt) apartment.sqFt = sqFt;
+		if (rent) apartment.rent = rent;
+		apartment.save(error => {
+			if (error) return res.json({ success: false, error });
+			return res.json({ success: true });
+		});
+	});
+});
+
+router.delete('/apartments/:apartmentId', (req, res) => {
+	const { apartmentId } = req.params;
+	if (!apartmentId) {
+		return res.json({ success: false, error:'No apartment id provided' });
+	}
+	Apartment.remove({ _id: apartmentId }, (error, comment) => {
+		if (error) return res.json({ success: fase, error });
+		return res.json({ success: true });
+	});
+});
+
 app.use('/api', router);
 
 app.listen(port, () => console.log(`api running on port ${port}`));

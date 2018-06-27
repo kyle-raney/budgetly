@@ -2,10 +2,11 @@
 'use strict'
 
 //dependencies
-var express = require('express');
-var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
-var Apartment = require('./model/apartments');
+import express from 'express';
+import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
+import logger from 'morgan';
+import Apartment from './models/apartments';
 
 //instances
 var app = express();
@@ -15,9 +16,12 @@ var port = 3001;
 
 //db config
 mongoose.connect(`mongodb://tramor:arb0retum@ds219191.mlab.com:19191/virtual-vcr`);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(logger('dev'));
 
 app.use(function(req, res, next) {
 	res.setHeader('Access-Control-Allow-Origin', '*');
@@ -33,27 +37,32 @@ router.get('/', function(req, res) {
 	res.json({ message: 'API Initialized!' });
 });
 
-router.route('/apartments').get(function(req, res) {
-	Apartment.find(function(err, apartments) {
-		if (err)
-			res.send(err);
-		res.json(apartments)
+router.get('/apartments', (req, res) => {
+	Apartment.find((err, apartments) => {
+		if (err) return res.json({ success: false, error: err });
+		return res.json({ success: true, data: apartments });
 	});
-}).post(function(req, res) {
-	var apartment = new Apartment();
-	apartment.aptNum = req.body.aptNum;
-	apartment.sqFt = req.body.sqFt;
-	apartment.rent = req.body.rent;
+});
 
-	apartment.save(function(err) {
-		if (err)
-			res.send(err);
-		res.json({ message: 'Apartment successfully added!' });
+router.post('/apartments', (req, res) => {
+	const apartment = new Apartment();
+	const { aptNum, sqFt, rent } = req.body;
+	if(!aptNum) {
+		return res.json({
+			success: false,
+			error: 'You must provide an apartment number'
+		});
+	}
+	apartment.aptNum = aptNum;
+	apartment.sqFt = sqFt;
+	apartment.rent = rent;
+
+	apartment.save(err => {
+		if (err) return res.json({ success: false, error: err });
+		return res.json({ success: true });
 	});
 });
 
 app.use('/api', router);
 
-app.listen(port, function() {
-	console.log(`api running on port ${port}`);
-});
+app.listen(port, () => console.log(`api running on port ${port}`));

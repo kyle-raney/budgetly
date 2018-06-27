@@ -1,13 +1,11 @@
 //model/apartments.js
-'use strict';
-//import dependency
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 
-var ApartmentsSchema = new Schema({
-	aptNum: Integer,
-	sqFt: Integer,
-	rent: Double
-});
+const ApartmentsSchema = new Schema({
+	aptNum: Number,
+	sqFt: Number,
+	rent: Schema.Types.Decimal128
+}, { timestamps: true });
 
-module.exports = mongoose.model('Apartment', ApartmentsSchema);
+export default mongoose.model('Apartment', ApartmentsSchema);

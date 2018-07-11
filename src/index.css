@@ -19,3 +19,18 @@ tr:nth-child(even) {
 .page {
 	font-family: 'Open Sans';
 }
+
+.page-body-left {
+	position: absolute;
+	width: 50%;
+}
+
+.page-body-inner {
+	margin: 20px;
+}
+
+.page-body-right {
+	position: absolute;
+	width: 50%;
+	right: 0;
+}

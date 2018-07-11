@@ -1,0 +1,15 @@
+.editableCellInput {
+	height: 100%;
+	width: 95%;
+
+}
+
+.editableCellWrapper {
+	width: 100%;
+}
+
+.rt-td {
+	display: flex;
+	align-items: center;
+	align-content: center;
+}

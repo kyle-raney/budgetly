@@ -1,0 +1,9 @@
+.label {
+	padding: 2px;
+}
+
+.custom-tooltip {
+	background: #0069ed;
+	color: white;
+	opacity: .75;
+}
